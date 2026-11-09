@@ -21,3 +21,6 @@ Email Routing: booking@cresswellcourt.co.uk → worker `cresswell-inbox` (which 
 
 ## Business rules (in the code)
 Full payment at booking; cancellation 14+ days full refund, 7–13 days 50%, under 7 none; min 3 nights; check-in Mon/Fri, check-out Mon/Thu/Fri; no cleaning fee; promo WELCOMEBACK = 10%.
+
+## Deploys
+Pushing to `main` triggers Cloudflare Workers Builds for the site (`wrangler.jsonc`). Other workers are still deployed manually for now.
