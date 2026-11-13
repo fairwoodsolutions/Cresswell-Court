@@ -453,7 +453,7 @@ footer{background:#0f1b2d;color:#e8e2d0;margin-top:20px}
 
   <section class="book pad" id="book" aria-label="Availability">
     <h2>Check availability</h2>
-    <p class="intro">Arrive on a Monday or a Friday. Leave on a Monday, Thursday or Friday. Minimum stay is 3 nights.<span id="discnote"></span></p>
+    <p class="intro">Arrive on a Monday or a Friday. Leave on a Monday, Thursday or Friday. Minimum stay is 3 nights. Christmas week (21 to 29 December) is flexible: arrive and leave on any day.<span id="discnote"></span></p>
     <div class="calwrap">
       <div class="cp">
         <div class="calnav">
@@ -596,7 +596,7 @@ footer{background:#0f1b2d;color:#e8e2d0;margin-top:20px}
     <div class="lft"><h2>Frequently Asked Questions</h2><p>Everything you need to know before you book. For anything else, send us a request above.</p></div>
     <div>
       <details open><summary>How do I book a stay at Cresswell Court?<svg class="ico"><use href="#i-down"/></svg></summary><p>Choose your dates in the calendar and send us the request. We check availability, reply the same day and send a secure card payment link. Please note that your dates are not secured until payment is received: until then they remain live and available to other guests, including on Airbnb, so please pay promptly once you have the link.</p></details>
-      <details><summary>Which days can I arrive and leave?<svg class="ico"><use href="#i-down"/></svg></summary><p>Arrival is on a Monday or a Friday, and the minimum stay is 3 nights. Check-in is from 3.00pm and check-out is strictly by 10.00am. Departure is on a Monday, Thursday or Friday. A Monday arrival can leave on Thursday, Friday or the following Monday, and a Friday arrival on Monday, Thursday or Friday.</p></details>
+      <details><summary>Which days can I arrive and leave?<svg class="ico"><use href="#i-down"/></svg></summary><p>Arrival is on a Monday or a Friday, and the minimum stay is 3 nights. Check-in is from 3.00pm and check-out is strictly by 10.00am. Departure is on a Monday, Thursday or Friday. Christmas week (21 to 29 December 2026) is the exception: you can arrive and leave on any day, with a 3 night minimum. A Monday arrival can leave on Thursday, Friday or the following Monday, and a Friday arrival on Monday, Thursday or Friday.</p></details>
       <details><summary>Is there parking at the apartment?<svg class="ico"><use href="#i-down"/></svg></summary><p>Yes. The apartment has its own private off-road parking space right outside the entrance, which is rare inside Tenby's old town walls.</p></details>
       <details><summary>Who can stay at the apartment?<svg class="ico"><use href="#i-down"/></svg></summary><p>The apartment is available to couples and single guests only, up to 2 guests, and the lead booker must be over 25. It is on the first floor with its own staircase, so it may not suit anyone with limited mobility. Ask us if you are unsure.</p></details>
       <details><summary>Are pets allowed?<svg class="ico"><use href="#i-down"/></svg></summary><p>No. The hosts do not accept pets.</p></details>
@@ -645,6 +645,8 @@ var CONFIG = {
   minNights: 3,
   arrivalDays: [1, 5],          // check-in on Monday (1) and Friday (5) only
   departDays: [1, 4, 5],        // check-out on Monday (1), Thursday (4) or Friday (5) only
+  // Website-only exception: any arrival/departure day inside these windows (Airbnb keeps the normal rules)
+  flexWindows: [{from:"2026-12-21",to:"2026-12-29"}],
   deposit: 100,
   contact: "[your booking email]",
   // Example unavailable nights as [first night, last night]. Replace with your Airbnb iCal feed.
@@ -659,8 +661,9 @@ var CONFIG = {
   function addDays(d,n){return new Date(d.getFullYear(),d.getMonth(),d.getDate()+n)}
   function nice(d){return d.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric"})}
   function gbp(n){return "£"+n.toLocaleString("en-GB")}
-  function isArr(d){return CONFIG.arrivalDays.indexOf(d.getDay())!==-1}
-  function isDep(d){return CONFIG.departDays.indexOf(d.getDay())!==-1}
+  function flex(d){var k=key(d);return CONFIG.flexWindows.some(function(w){return k>=w.from&&k<=w.to})}
+  function isArr(d){return flex(d)||CONFIG.arrivalDays.indexOf(d.getDay())!==-1}
+  function isDep(d){return flex(d)||CONFIG.departDays.indexOf(d.getDay())!==-1}
   function airbnbN(d){var k=key(d),r=CONFIG.rate,w=CONFIG.weekendRate;
     if(CONFIG.prices&&typeof CONFIG.prices[k]==='number')return CONFIG.prices[k];
     CONFIG.seasons.forEach(function(s){if(k>=s.from&&k<=s.to){r=s.rate;w=s.weekendRate}});
